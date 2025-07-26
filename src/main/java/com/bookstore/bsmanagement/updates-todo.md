@@ -107,3 +107,17 @@ src/main/java/com/bookstore/bsmanagement/mapper/OrderMapper.java
 src/main/java/com/bookstore/bsmanagement/exception/GlobalExceptionHandler.java
 src/main/java/com/bookstore/bsmanagement/exception/ResourceNotFoundException.java
 src/main/java/com/bookstore/bsmanagement/exception/BadRequestException.java
+
+
+Add MySQL configuration and Maven wrapper setup
+
+- Created .gitattributes to manage line endings for different files.
+- Added .gitignore to exclude build artifacts and IDE-specific files.
+- Introduced Maven wrapper properties and scripts for easier Maven management.
+- Implemented mvnw and mvnw.cmd scripts for cross-platform Maven execution.
+- Added MySQL driver dependency in pom.xml for database connectivity.
+- Created application.properties with database connection settings and JPA configurations.
+- Developed entity classes: Book, Order, User with appropriate JPA annotations.
+- Added ServletInitializer for Spring Boot application deployment.
+- Updated tests to ensure application context loads correctly.
+- Documented MySQL configuration plan and API updates in markdown files."
