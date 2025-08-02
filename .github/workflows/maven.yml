@@ -19,16 +19,55 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE:  bookstore_db
+          MYSQL_USER:      testuser
+          MYSQL_PASSWORD:  testpass
+        ports:
+          # inside the runner this container listens on 127.0.0.1:3306
+          - 3306:3306
+        # health-check so job waits until DB is ready
+        options: >-
+          --health-cmd="mysqladmin ping -h127.0.0.1 -utestuser -ptestpass"
+          --health-interval=5s --health-timeout=2s --health-retries=10
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # - name: Cache Maven
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.m2
+      #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+      # 2️⃣ Maven uses the database running on “127.0.0.1:3306”
+      - name: Build & Test with Maven
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/bookstore_db?useSSL=false&serverTimezone=UTC
+          SPRING_DATASOURCE_USERNAME: testuser
+          SPRING_DATASOURCE_PASSWORD: testpass
+        run: ./mvnw -B verify
+
+    # steps:
+    # - uses: actions/checkout@v4
+    # - name: Set up JDK 17
+    #   uses: actions/setup-java@v4
+    #   with:
+    #     java-version: '17'
+    #     distribution: 'temurin'
+    #     cache: maven
+    # - name: Build with Maven
+    #   run: mvn -B package --file pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
