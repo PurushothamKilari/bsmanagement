@@ -6,7 +6,6 @@ import com.bookstore.bsmanagement.entity.Book;
 import com.bookstore.bsmanagement.service.BookService;
 
 
-
 @RestController
 @RequestMapping("/books")
 public class BookController {
