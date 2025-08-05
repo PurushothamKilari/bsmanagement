@@ -3,8 +3,6 @@ package com.bookstore.bsmanagement.config;
 import com.bookstore.bsmanagement.entity.User;
 import com.bookstore.bsmanagement.repository.UserRepositoryInterface;
 
-import java.util.HashSet;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -34,7 +32,7 @@ public class DataInitializer implements CommandLineRunner {
         admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("admin123"));
         admin.setEmail("admin@bookstore.com");
-        admin.setRole(Set.of("ROLE_ADMIN"));
+        admin.setRole("ROLE_ADMIN");
         admin.setActive(true);
         userRepository.save(admin);
 
@@ -43,10 +41,7 @@ public class DataInitializer implements CommandLineRunner {
         user.setUsername("user");
         user.setPassword(passwordEncoder.encode("user123"));
         user.setEmail("user@bookstore.com");
-         Set<String> userRoles = new HashSet<>();
-        userRoles.add("ADMIN");
-        userRoles.add("USER");
-        user.setRole(userRoles);
+        user.setRole("ROLE_USER");
         user.setActive(true);
         userRepository.save(user);
 
@@ -55,10 +50,7 @@ public class DataInitializer implements CommandLineRunner {
         manager.setUsername("manager");
         manager.setPassword(passwordEncoder.encode("manager123"));
         manager.setEmail("manager@bookstore.com");
-        Set<String> managerRoles = new HashSet<>();
-        managerRoles.add("ADMIN");
-        managerRoles.add("MANAGER");
-        manager.setRole(managerRoles);
+        manager.setRole("ROLE_MANAGER");
         manager.setActive(true);
         userRepository.save(manager);
 

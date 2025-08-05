@@ -54,10 +54,8 @@ public class User {
         @Column(length = 255)
         private String auditDetails;
 
-        @ElementCollection(fetch = FetchType.EAGER)
-        @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-        @Column(name = "role")
-        private Set<String> role;
+        @Column(name = "role", length = 50)
+        private String role;
 
         @ElementCollection(fetch = FetchType.EAGER)
         @CollectionTable(name = "user_access", joinColumns = @JoinColumn(name = "user_id"))
