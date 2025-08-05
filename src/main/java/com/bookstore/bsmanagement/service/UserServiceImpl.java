@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bookstore.bsmanagement.entity.User;
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
    @Autowired
    private UserRepositoryInterface userRepository;
+   
+   @Autowired
+   private PasswordEncoder passwordEncoder;
 
    @Override
    public User findUserByUsername(String username){
@@ -46,6 +50,8 @@ public class UserServiceImpl implements UserService {
 
      @Override
      public User createUser(User user) {
+         // Encode the password before saving
+         user.setPassword(passwordEncoder.encode(user.getPassword()));
          return userRepository.save(user);
      }
 
@@ -53,6 +59,10 @@ public class UserServiceImpl implements UserService {
      public User updateUser(Long id, User userDetails) {
          if (userRepository.existsById(id)) {
              userDetails.setId(id);
+             // Encode the password if it's being updated
+             if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+                 userDetails.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+             }
              return userRepository.save(userDetails);
          }
          return null; // or throw an exception if preferred

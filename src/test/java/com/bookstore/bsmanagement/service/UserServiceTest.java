@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepositoryInterface userRepository;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -150,7 +154,7 @@ class UserServiceTest {
                 .username("newuser")
                 .email("new@example.com")
                 .fullName("New User")
-                .password("newpass123")
+                .password(passwordEncoder.encode("newpass123"))
                 .build();
         
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
@@ -173,7 +177,7 @@ class UserServiceTest {
                 .username("updateduser")
                 .email("updated@example.com")
                 .fullName("Updated User")
-                .password("updatedpass")
+                .password(passwordEncoder.encode("updatedpass"))
                 .build();
         
         when(userRepository.existsById(userId)).thenReturn(true);
