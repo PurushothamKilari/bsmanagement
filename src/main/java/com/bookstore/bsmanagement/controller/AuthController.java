@@ -1,5 +1,7 @@
 package com.bookstore.bsmanagement.controller;
 
+import java.util.List;
+
 import com.bookstore.bsmanagement.dto.AuthRequest;
 import com.bookstore.bsmanagement.dto.AuthResponse;
 import com.bookstore.bsmanagement.entity.User;
@@ -13,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -54,9 +57,25 @@ public class AuthController {
      */
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
-        // This is a placeholder for user registration
-        // You would typically implement user creation logic here
-        // userService.createUser(user);
-        return ResponseEntity.ok(userService.createUser(user));
+        // Create the user
+        User createdUser = userService.createUser(user);
+        
+        // Create UserDetails object for the newly registered user
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+                .username(createdUser.getUsername())
+                .password(createdUser.getPassword())
+                .authorities(List.of()) // Empty authorities for now, will be loaded properly by CustomUserDetailsService
+                .build();
+        
+        // Generate JWT token
+        String token = jwtUtil.generateToken(userDetails);
+        
+        // Return AuthResponse with token and username
+        return ResponseEntity.ok(new AuthResponse(token, createdUser.getUsername()));
+    }
+
+    @PostMapping("/bulk-register")
+    public ResponseEntity<List<User>> bulkRegister(@RequestBody List<User> users) {
+        return ResponseEntity.ok(userService.createBulkUser(users));
     }
 }

@@ -12,6 +12,9 @@ import com.bookstore.bsmanagement.entity.User;
 
 import com.bookstore.bsmanagement.repository.UserRepositoryInterface;
 
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -84,5 +87,18 @@ public class UserServiceImpl implements UserService {
          // return userRepository.findAll(pageable).getContent();
          return userRepository.findAll(PageRequest.of(page, size)).getContent();
      }
+
+     @Override
+     public List<User> addMultipleUsers(List<User> users) {
+        return StreamSupport.stream(userRepository.saveAll(users).spliterator(), false)
+                           .collect(Collectors.toList());
+     }
+
+     @Override
+     public List<User> createBulkUser(List<User> users) {
+         // Encode passwords for all users before saving
+         users.forEach(user -> user.setPassword(passwordEncoder.encode(user.getPassword())));
+         return userRepository.saveAll(users);
+     }
 }
-      // TODO Auto-generated method stub
+  

@@ -28,6 +28,11 @@ public class BookController {
         return bookService.addBook(book);
     }
 
+    @PostMapping("/batch")
+    public List<Book> addMultipleBooks(@RequestBody List<Book> books) {
+        return bookService.addMultipleBooks(books);
+    }
+
     @PutMapping("/{id}")
     public Book updateBook(@PathVariable String id, @RequestBody Book book) {
         return bookService.updateBook(id, book);

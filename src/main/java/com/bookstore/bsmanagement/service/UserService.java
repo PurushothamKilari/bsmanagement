@@ -36,8 +36,10 @@ List<User> getAllUsers();
 List<User> getUsersByPage(int page, int size);
 User getUserById(Long id);
 User createUser(User user);
+List<User> createBulkUser(List<User> users);
 User updateUser(Long id, User userDetails);
 boolean deleteUser(Long id);
+List<User> addMultipleUsers(List<User> users);
         
   
    

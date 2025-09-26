@@ -63,6 +63,6 @@ public class User {
         private Set<String> access;
 
         @Column(name= "active")
-        private boolean active;
+        private Boolean active;
 
 }
