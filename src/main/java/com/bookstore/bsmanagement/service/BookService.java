@@ -11,6 +11,7 @@ public interface BookService {
     boolean removeBook(String id);  
     Book updateBook(String id, Book updatedBook);
     void deleteBook(Long id);
+    List<Book> addMultipleBooks(List<Book> books);
 
 
     // Uncomment the following lines if you want to use an in-memory storage for books

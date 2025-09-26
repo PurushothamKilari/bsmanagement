@@ -50,8 +50,15 @@ public class BookServiceImpl  implements BookService {
     }
     @Override
     public void deleteBook(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteBook'");
+        String stringId = String.valueOf(id);
+        if (bookRepository.existsById(stringId)) {
+            bookRepository.deleteById(stringId);
+        }
+    }
+
+    @Override
+    public List<Book> addMultipleBooks(List<Book> books) {
+        return bookRepository.saveAll(books);
     }
 
 }

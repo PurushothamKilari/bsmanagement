@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bookstore.bsmanagement.entity.Book;
 import com.bookstore.bsmanagement.entity.User;
 import com.bookstore.bsmanagement.service.UserService;
 
@@ -45,6 +46,11 @@ class UserController {
         return userService.createUser(user);
     }
 
+    @PostMapping("/bulk")
+    public List<User> createBulkUsers(@RequestBody List<User> users) {
+        return userService.createBulkUser(users);
+    }
+
     @PutMapping("/v1/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         User updatedUser = userService.updateUser(id, userDetails);
@@ -55,7 +61,7 @@ class UserController {
         }
     }
 
-    @DeleteMapping("/v1/{id}")
+    @DeleteMapping("deleteUser/v1/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         boolean deleted = userService.deleteUser(id);
         if (deleted) {
@@ -64,4 +70,9 @@ class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PostMapping("/batch")
+    public List<User> addMultipleUsers(@RequestBody List<User> users) {
+        return userService.addMultipleUsers(users);
+    }
+
 }
